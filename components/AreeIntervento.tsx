@@ -78,7 +78,7 @@ export function AreeIntervento() {
                   </span>
                 </div>
                 <div className="p-7">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gold-dark">{area.tag}</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">{area.tag}</p>
                   <h3 className="mt-3 font-display text-xl font-semibold leading-snug text-ink">{area.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted">{area.text}</p>
                 </div>

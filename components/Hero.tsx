@@ -1,131 +1,110 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
-import { IconArrowUpRight, IconChevronDown } from "@/components/icons";
+import { IconArrowUpRight } from "@/components/icons";
 
-const HEADLINE_LINES = ["La vostra Visione.", "La nostra Missione", "immobiliare."];
+// Video is only served at lg+ (>=1024px): on phones/tablets it would cost real
+// mobile data and battery for a purely decorative background, so those
+// breakpoints keep the static poster instead.
+const VIDEO_BREAKPOINT_QUERY = "(min-width: 1024px)";
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [showVideo, setShowVideo] = useState(false);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setShowVideo(false);
+      return;
+    }
+    const mql = window.matchMedia(VIDEO_BREAKPOINT_QUERY);
+    const update = () => setShowVideo(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, [reduceMotion]);
 
   return (
-    <section id="main" className="relative overflow-hidden bg-paper pt-[128px] pb-20 lg:pt-[168px] lg:pb-28">
-      <div
-        className="pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full opacity-[0.08]"
-        style={{ background: "radial-gradient(circle, #C5A059 0%, transparent 70%)" }}
-        aria-hidden="true"
-      />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px] grid-dots-dark opacity-40" aria-hidden="true" />
+    <section id="main" className="relative flex min-h-screen items-end overflow-hidden bg-ink">
+      <div className="absolute inset-0" aria-hidden="true">
+        {showVideo ? (
+          <video
+            ref={videoRef}
+            className="h-full w-full object-cover"
+            poster="/generated/hero-villa.jpg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+          >
+            <source src="/generated/hero-video.webm" type="video/webm" />
+            <source src="/generated/hero-video.mp4" type="video/mp4" />
+          </video>
+        ) : (
+          <Image
+            src="/generated/hero-villa.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        )}
+        {/* Filmic base wash, lightest at the top so the video reads clearly there */}
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/25 to-ink/10" />
+      </div>
 
-      <Container className="relative">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <motion.p
-              initial={reduceMotion ? undefined : { opacity: 0, y: 12 }}
-              animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-card px-4 py-1.5 text-sm font-medium text-ink-soft"
+      <Container className="relative w-full pb-16 sm:pb-20 lg:pb-24">
+        <motion.div
+          initial={reduceMotion ? undefined : { opacity: 0, y: 24 }}
+          animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-2xl rounded-[28px] bg-ink/80 p-8 shadow-2xl shadow-ink/30 backdrop-blur-sm sm:p-10 lg:p-12"
+        >
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white/90">
+            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+            Consulenza per investimenti immobiliari
+          </p>
+
+          <h1 className="font-display font-bold leading-[0.98] tracking-tightest text-[clamp(2.3rem,5.2vw,4rem)] text-white text-balance">
+            <span className="block">La vostra Visione.</span>
+            <span className="block text-gold-light">La nostra Missione</span>
+            <span className="block">immobiliare.</span>
+          </h1>
+
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">
+            Affianchiamo privati e investitori nella gestione del proprio patrimonio immobiliare,
+            con un metodo di consulenza — non di semplice intermediazione — fatto di trasparenza,
+            tecnologie innovative e soluzioni sostenibili.
+          </p>
+
+          <div className="mt-9 flex flex-wrap items-center gap-4">
+            <a
+              href="#contatti"
+              className="group inline-flex items-center gap-2 rounded-full bg-brand px-7 py-4 text-base font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-brand-dark"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-              Consulenza per investimenti immobiliari
-            </motion.p>
-
-            <h1 className="font-display font-bold leading-[0.98] tracking-tightest text-[clamp(2.6rem,6.4vw,5rem)] text-ink text-balance">
-              {HEADLINE_LINES.map((line, i) => (
-                <motion.span
-                  key={line}
-                  initial={reduceMotion ? undefined : { opacity: 0, y: 28 }}
-                  animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                  transition={{ duration: 0.75, delay: 0.15 + i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-                  className={`block ${i === 1 ? "text-brand" : ""}`}
-                >
-                  {line}
-                </motion.span>
-              ))}
-            </h1>
-
-            <motion.p
-              initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
-              animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
-              className="mt-7 max-w-xl text-lg leading-relaxed text-muted"
+              Prenota una consulenza gratuita
+              <IconArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+            <a
+              href="#approccio"
+              className="inline-flex items-center gap-2 rounded-full border border-white/40 px-7 py-4 text-base font-semibold text-white transition-colors hover:border-white hover:bg-white/10"
             >
-              Affianchiamo privati e investitori nella gestione del proprio patrimonio immobiliare,
-              con un metodo di consulenza — non di semplice intermediazione — fatto di trasparenza,
-              tecnologie innovative e soluzioni sostenibili. Dalla vendita rapida e sicura, all&apos;acquisto
-              chiavi in mano, fino a operazioni di investimento selezionate con rigore.
-            </motion.p>
-
-            <motion.div
-              initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
-              animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.75 }}
-              className="mt-10 flex flex-wrap items-center gap-4"
-            >
-              <a
-                href="#contatti"
-                className="group inline-flex items-center gap-2 rounded-full bg-brand px-7 py-4 text-base font-semibold text-white transition-transform hover:-translate-y-0.5 hover:bg-brand-dark"
-              >
-                Prenota una consulenza gratuita
-                <IconArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </a>
-              <a
-                href="#approccio"
-                className="inline-flex items-center gap-2 rounded-full border border-ink/15 px-7 py-4 text-base font-semibold text-ink transition-colors hover:border-ink"
-              >
-                Scopri il nostro metodo
-              </a>
-            </motion.div>
+              Scopri il nostro metodo
+            </a>
           </div>
 
-          <motion.div
-            initial={reduceMotion ? undefined : { opacity: 0, scale: 0.96 }}
-            animate={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative lg:col-span-5"
-          >
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] bg-ink shadow-2xl shadow-brand/10">
-              <Image
-                src="/generated/hero-villa.jpg"
-                alt="Villa contemporanea con facciata in vetro e pietra chiara, luce calda al tramonto — investimento immobiliare di pregio seguito da Visio Immobiliare"
-                fill
-                priority
-                sizes="(min-width: 1024px) 40vw, 90vw"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
-            </div>
-
-            <motion.div
-              initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
-              animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.9 }}
-              className="absolute -left-6 bottom-6 hidden w-[240px] rounded-2xl border border-line bg-paper/95 p-5 shadow-xl backdrop-blur sm:block"
-            >
-              <p className="font-display text-3xl font-bold text-brand">ROI &gt;24%</p>
-              <p className="mt-1 text-sm text-muted">sulle operazioni selezionate per i nostri investitori</p>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        <motion.a
-          href="#approccio"
-          initial={reduceMotion ? undefined : { opacity: 0 }}
-          animate={reduceMotion ? undefined : { opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
-          className="mt-20 hidden items-center gap-2 text-sm font-medium text-ink-soft lg:flex"
-          aria-label="Scorri per saperne di più"
-        >
-          Scorri
-          <motion.span
-            animate={reduceMotion ? undefined : { y: [0, 5, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <IconChevronDown className="h-4 w-4" />
-          </motion.span>
-        </motion.a>
+          <p className="mt-7 text-sm text-white/70">
+            <span className="font-semibold text-gold-light">ROI &gt;24%</span> sulle operazioni
+            selezionate per i nostri investitori
+          </p>
+        </motion.div>
       </Container>
     </section>
   );

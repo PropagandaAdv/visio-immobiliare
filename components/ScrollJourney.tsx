@@ -124,7 +124,11 @@ const BANDS = {
   aree: [0.66, 1.0] as const,
 };
 
-const JOURNEY_HEIGHT_VH = 380;
+// Scaled to keep roughly the same vh-per-second pacing as the original
+// 10s single-shot video (~38vh/s) now that the chained video runs ~18s
+// (villa exterior -> interior -> pool), so each chapter still gets a
+// comfortable scroll plateau.
+const JOURNEY_HEIGHT_VH = 680;
 
 function CinematicJourney() {
   const wrapRef = useRef<HTMLDivElement>(null);

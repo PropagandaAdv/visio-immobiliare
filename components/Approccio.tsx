@@ -35,11 +35,11 @@ export function Approccio() {
         <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <Reveal>
-              <span className="text-sm font-semibold uppercase tracking-[0.18em] text-brand">Chi siamo</span>
+              <span className="text-sm font-semibold uppercase tracking-[0.18em] text-brand">Il metodo</span>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.08] tracking-tight text-ink text-balance">
-                Un approccio da consulenti, non da agenzia.
+                I quattro pilastri che guidano ogni operazione.
               </h2>
             </Reveal>
             <Reveal delay={0.1}>

@@ -48,7 +48,7 @@ export function AreeIntervento() {
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="mt-4 font-display text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.08] tracking-tight text-ink text-balance">
-              Soluzioni su misura per ogni esigenza immobiliare.
+              Le quattro aree in cui interveniamo.
             </h2>
           </Reveal>
           <Reveal delay={0.1}>

@@ -1,5 +1,5 @@
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
+import { ScrollJourney } from "@/components/ScrollJourney";
 import { Approccio } from "@/components/Approccio";
 import { AreeIntervento } from "@/components/AreeIntervento";
 import { PercheVisio } from "@/components/PercheVisio";
@@ -42,7 +42,7 @@ export default function Home() {
       />
       <Header />
       <main>
-        <Hero />
+        <ScrollJourney />
         <Approccio />
         <AreeIntervento />
         <PercheVisio />
